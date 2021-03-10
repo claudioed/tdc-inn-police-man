@@ -1,0 +1,16 @@
+{
+  "database" : {
+    "host": "localhost",
+    "port":5434,
+    "database": "police-man",
+    "user" : "admin",
+    "password": "admin"
+  },
+  "redis": {
+    "host" : "redis://localhost:6379"
+  },
+  "user-service": {
+    "host" : "localhost",
+    "port": 9999
+  }
+}
