@@ -76,10 +76,12 @@ public class RegistryPolicyViolation extends AbstractVerticle {
     });
   }
 
-  public Future<JsonObject> initConfig() {
+  public Future<JsonObject> initConfig(){
+    var configPath = System.getenv("VERTX_CONFIG_PATH");
+    LOG.info("Config Path: " + configPath);
     ConfigStoreOptions fileStore = new ConfigStoreOptions()
       .setType("file")
-      .setConfig(new JsonObject().put("path", "src/main/resources/config.json"));
+      .setConfig(new JsonObject().put("path", configPath));
     ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileStore);
     ConfigRetriever retriever = ConfigRetriever.create(vertx, options);
     return retriever.getConfig();

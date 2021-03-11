@@ -10,21 +10,15 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
-
     <vertx.version>4.0.2</vertx.version>
     <junit-jupiter.version>5.7.0</junit-jupiter.version>
-
-    <main.verticle>tech.claudioed.police.man.verticles.StartServer</main.verticle>
-    <launcher.class>io.vertx.core.Launcher</launcher.class>
-
+    <launcher.class>tech.claudioed.police.man.Application</launcher.class>
     <protobuf.version>3.6.1</protobuf.version>
     <grpc.version>1.25.0</grpc.version>
-
   </properties>
 
   <dependencyManagement>
@@ -181,7 +175,6 @@
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
                     <Main-Class>${launcher.class}</Main-Class>
-                    <Main-Verticle>${main.verticle}</Main-Verticle>
                   </manifestEntries>
                 </transformer>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
