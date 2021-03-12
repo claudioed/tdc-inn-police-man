@@ -10,7 +10,7 @@ public class UserServiceConfig {
 
   public UserServiceConfig(JsonObject datasourceConfig) {
     this.host = datasourceConfig.getString("host", "localhost");
-    this.port = datasourceConfig.getInteger("host", 7777);
+    this.port = datasourceConfig.getInteger("port", 7777);
   }
 
   public String getHost() {
