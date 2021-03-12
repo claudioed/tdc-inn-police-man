@@ -1,9 +1,10 @@
 package tech.claudioed.police.man.verticles;
 
+import grpc.health.v1.HealthGrpc;
+import grpc.health.v1.HealthOuterClass;
+import io.grpc.stub.StreamObserver;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import io.vertx.grpc.VertxServerBuilder;
 import tech.claudioed.police.man.data.MessageContent;
 import tech.claudioed.police.man.grpc.MessageData;
@@ -23,7 +24,20 @@ public class StartServer extends AbstractVerticle {
         vertx.eventBus().send("request.apply.policies", message.toJson());
         return Future.succeededFuture(RegistryID.newBuilder().setId(UUID.randomUUID().toString()).build());
       }
-    }).build();
+    }).addService(
+      new HealthGrpc.HealthImplBase() {
+        @Override
+        public void check(HealthOuterClass.HealthCheckRequest request, StreamObserver<HealthOuterClass.HealthCheckResponse> responseObserver) {
+          responseObserver.onNext(HealthOuterClass.HealthCheckResponse.newBuilder().setStatus(HealthOuterClass.HealthCheckResponse.ServingStatus.SERVING).build());
+          responseObserver.onCompleted();
+        }
+        @Override
+        public void watch(HealthOuterClass.HealthCheckRequest request, StreamObserver<HealthOuterClass.HealthCheckResponse> responseObserver) {
+          responseObserver.onNext(HealthOuterClass.HealthCheckResponse.newBuilder().setStatus(HealthOuterClass.HealthCheckResponse.ServingStatus.SERVING).build());
+          responseObserver.onCompleted();
+        }
+      }
+    ).build();
     server.start();
   }
 

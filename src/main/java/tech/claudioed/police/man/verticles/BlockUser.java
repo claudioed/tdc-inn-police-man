@@ -23,7 +23,6 @@ public class BlockUser extends AbstractVerticle {
   @Override
   public void start() {
     WebClient client = WebClient.create(this.vertx);
-
     initConfig().compose(this::userServiceConfig).onSuccess(userServiceConfig -> {
       this.vertx.eventBus().consumer("request.block.user",handler ->{
         var blockUserIntent = Json.decodeValue(handler.body().toString(), BlockUserIntent.class);

@@ -18,7 +18,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 /**
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.16.1)",
+    value = "by gRPC proto compiler (version 1.25.0)",
     comments = "Source: policeman.proto")
 public final class PoliceOfficerGrpc {
 
@@ -41,22 +41,21 @@ public final class PoliceOfficerGrpc {
     if ((getRegistryMethod = PoliceOfficerGrpc.getRegistryMethod) == null) {
       synchronized (PoliceOfficerGrpc.class) {
         if ((getRegistryMethod = PoliceOfficerGrpc.getRegistryMethod) == null) {
-          PoliceOfficerGrpc.getRegistryMethod = getRegistryMethod = 
+          PoliceOfficerGrpc.getRegistryMethod = getRegistryMethod =
               io.grpc.MethodDescriptor.<tech.claudioed.police.man.grpc.MessageData, tech.claudioed.police.man.grpc.RegistryID>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(
-                  "policies.PoliceOfficer", "Registry"))
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Registry"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   tech.claudioed.police.man.grpc.MessageData.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   tech.claudioed.police.man.grpc.RegistryID.getDefaultInstance()))
-                  .setSchemaDescriptor(new PoliceOfficerMethodDescriptorSupplier("Registry"))
-                  .build();
-          }
+              .setSchemaDescriptor(new PoliceOfficerMethodDescriptorSupplier("Registry"))
+              .build();
         }
-     }
-     return getRegistryMethod;
+      }
+    }
+    return getRegistryMethod;
   }
 
   /**
