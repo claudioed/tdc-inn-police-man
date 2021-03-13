@@ -26,17 +26,20 @@ public class ApplyPolicies extends AbstractVerticle {
     initConfig().compose(this::redis).compose(connection -> {
       var redisAPI = RedisAPI.api(connection);
       vertx.eventBus().consumer("request.apply.policies", message -> {
+        LOG.info("Checking violations...");
         var json = new JsonObject(message.body().toString());
         var messageContent = new MessageContent(json);
         redisAPI.smembers("words").onSuccess(response -> {
           LOG.info("Checking words... ");
-          if (response.type() == ResponseType.MULTI) {
-            for (Response item : response) {
-              var word = item.toString();
-              if (messageContent.containsWord(word)) {
-                LOG.info("Violation was found..");
-                vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)));
-                break;
+          if (response.size() > 0){
+            if (response.type() == ResponseType.MULTI) {
+              for (Response item : response) {
+                var word = item.toString();
+                if (messageContent.containsWord(word)) {
+                  LOG.info("Violation was found..");
+                  vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)));
+                  break;
+                }
               }
             }
           }
