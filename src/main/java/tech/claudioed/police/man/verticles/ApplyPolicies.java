@@ -43,6 +43,8 @@ public class ApplyPolicies extends AbstractVerticle {
                 }
               }
             }
+          }else{
+            LOG.info("There are no policies registered!!");
           }
         }).onFailure(err -> {
           LOG.error("Error to execute instruction in redis ", err);
