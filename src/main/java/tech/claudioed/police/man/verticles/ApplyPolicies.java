@@ -23,7 +23,8 @@ public class ApplyPolicies extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    initConfig().compose(this::redis).compose(connection -> {
+    initConfig().compose(this::redis).onSuccess(connection ->{
+      LOG.info("Starting redis connection...");
       var redisAPI = RedisAPI.api(connection);
       vertx.eventBus().consumer("request.apply.policies", message -> {
         LOG.info("Checking violations...");
@@ -31,7 +32,7 @@ public class ApplyPolicies extends AbstractVerticle {
         var messageContent = new MessageContent(json);
         redisAPI.smembers("words").onSuccess(response -> {
           LOG.info("Checking words... ");
-          if (response.size() > 0){
+          if (response.size() > 0) {
             if (response.type() == ResponseType.MULTI) {
               for (Response item : response) {
                 var word = item.toString();
@@ -47,9 +48,12 @@ public class ApplyPolicies extends AbstractVerticle {
           LOG.error("Error to execute instruction in redis ", err);
         });
       });
+      LOG.info("Redis connected successfully!!!");
       startPromise.complete();
-      return Future.succeededFuture();
-    });
+    }).onFailure(err ->{
+      LOG.error("Fail on redis connection",err);
+      startPromise.fail("Fail on redis connection");
+    }).mapEmpty();
   }
 
   public Future<RedisConnection> redis(JsonObject cfg){
