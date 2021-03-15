@@ -44,6 +44,11 @@ public final class VertxPoliceOfficerGrpc {
             return io.vertx.grpc.stub.ClientCalls.oneToOne(ctx, request, delegateStub::registry);
         }
 
+        
+        public io.vertx.core.Future<tech.claudioed.police.man.grpc.RegisteredPolicy> addPolicy(tech.claudioed.police.man.grpc.Policy request) {
+            return io.vertx.grpc.stub.ClientCalls.oneToOne(ctx, request, delegateStub::addPolicy);
+        }
+
     }
 
     
@@ -65,6 +70,11 @@ public final class VertxPoliceOfficerGrpc {
             throw new io.grpc.StatusRuntimeException(io.grpc.Status.UNIMPLEMENTED);
         }
 
+        
+        public io.vertx.core.Future<tech.claudioed.police.man.grpc.RegisteredPolicy> addPolicy(tech.claudioed.police.man.grpc.Policy request) {
+            throw new io.grpc.StatusRuntimeException(io.grpc.Status.UNIMPLEMENTED);
+        }
+
         @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
             return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
                     .addMethod(
@@ -74,11 +84,19 @@ public final class VertxPoliceOfficerGrpc {
                                             tech.claudioed.police.man.grpc.MessageData,
                                             tech.claudioed.police.man.grpc.RegistryID>(
                                             this, METHODID_REGISTRY, compression)))
+                    .addMethod(
+                            tech.claudioed.police.man.grpc.PoliceOfficerGrpc.getAddPolicyMethod(),
+                            asyncUnaryCall(
+                                    new MethodHandlers<
+                                            tech.claudioed.police.man.grpc.Policy,
+                                            tech.claudioed.police.man.grpc.RegisteredPolicy>(
+                                            this, METHODID_ADD_POLICY, compression)))
                     .build();
         }
     }
 
     private static final int METHODID_REGISTRY = 0;
+    private static final int METHODID_ADD_POLICY = 1;
 
     private static final class MethodHandlers<Req, Resp> implements
             io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -106,6 +124,13 @@ public final class VertxPoliceOfficerGrpc {
                             (io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegistryID>) responseObserver,
                             compression,
                             serviceImpl::registry);
+                    break;
+                case METHODID_ADD_POLICY:
+                    io.vertx.grpc.stub.ServerCalls.oneToOne(
+                            (tech.claudioed.police.man.grpc.Policy) request,
+                            (io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegisteredPolicy>) responseObserver,
+                            compression,
+                            serviceImpl::addPolicy);
                     break;
                 default:
                     throw new java.lang.AssertionError();

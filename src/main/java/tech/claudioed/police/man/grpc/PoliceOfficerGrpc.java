@@ -58,6 +58,37 @@ public final class PoliceOfficerGrpc {
     return getRegistryMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<tech.claudioed.police.man.grpc.Policy,
+      tech.claudioed.police.man.grpc.RegisteredPolicy> getAddPolicyMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "AddPolicy",
+      requestType = tech.claudioed.police.man.grpc.Policy.class,
+      responseType = tech.claudioed.police.man.grpc.RegisteredPolicy.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<tech.claudioed.police.man.grpc.Policy,
+      tech.claudioed.police.man.grpc.RegisteredPolicy> getAddPolicyMethod() {
+    io.grpc.MethodDescriptor<tech.claudioed.police.man.grpc.Policy, tech.claudioed.police.man.grpc.RegisteredPolicy> getAddPolicyMethod;
+    if ((getAddPolicyMethod = PoliceOfficerGrpc.getAddPolicyMethod) == null) {
+      synchronized (PoliceOfficerGrpc.class) {
+        if ((getAddPolicyMethod = PoliceOfficerGrpc.getAddPolicyMethod) == null) {
+          PoliceOfficerGrpc.getAddPolicyMethod = getAddPolicyMethod =
+              io.grpc.MethodDescriptor.<tech.claudioed.police.man.grpc.Policy, tech.claudioed.police.man.grpc.RegisteredPolicy>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "AddPolicy"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  tech.claudioed.police.man.grpc.Policy.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  tech.claudioed.police.man.grpc.RegisteredPolicy.getDefaultInstance()))
+              .setSchemaDescriptor(new PoliceOfficerMethodDescriptorSupplier("AddPolicy"))
+              .build();
+        }
+      }
+    }
+    return getAddPolicyMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -92,6 +123,13 @@ public final class PoliceOfficerGrpc {
       asyncUnimplementedUnaryCall(getRegistryMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void addPolicy(tech.claudioed.police.man.grpc.Policy request,
+        io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegisteredPolicy> responseObserver) {
+      asyncUnimplementedUnaryCall(getAddPolicyMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -101,6 +139,13 @@ public final class PoliceOfficerGrpc {
                 tech.claudioed.police.man.grpc.MessageData,
                 tech.claudioed.police.man.grpc.RegistryID>(
                   this, METHODID_REGISTRY)))
+          .addMethod(
+            getAddPolicyMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                tech.claudioed.police.man.grpc.Policy,
+                tech.claudioed.police.man.grpc.RegisteredPolicy>(
+                  this, METHODID_ADD_POLICY)))
           .build();
     }
   }
@@ -130,6 +175,14 @@ public final class PoliceOfficerGrpc {
       asyncUnaryCall(
           getChannel().newCall(getRegistryMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void addPolicy(tech.claudioed.police.man.grpc.Policy request,
+        io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegisteredPolicy> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getAddPolicyMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -155,6 +208,13 @@ public final class PoliceOfficerGrpc {
     public tech.claudioed.police.man.grpc.RegistryID registry(tech.claudioed.police.man.grpc.MessageData request) {
       return blockingUnaryCall(
           getChannel(), getRegistryMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public tech.claudioed.police.man.grpc.RegisteredPolicy addPolicy(tech.claudioed.police.man.grpc.Policy request) {
+      return blockingUnaryCall(
+          getChannel(), getAddPolicyMethod(), getCallOptions(), request);
     }
   }
 
@@ -183,9 +243,18 @@ public final class PoliceOfficerGrpc {
       return futureUnaryCall(
           getChannel().newCall(getRegistryMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<tech.claudioed.police.man.grpc.RegisteredPolicy> addPolicy(
+        tech.claudioed.police.man.grpc.Policy request) {
+      return futureUnaryCall(
+          getChannel().newCall(getAddPolicyMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_REGISTRY = 0;
+  private static final int METHODID_ADD_POLICY = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -207,6 +276,10 @@ public final class PoliceOfficerGrpc {
         case METHODID_REGISTRY:
           serviceImpl.registry((tech.claudioed.police.man.grpc.MessageData) request,
               (io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegistryID>) responseObserver);
+          break;
+        case METHODID_ADD_POLICY:
+          serviceImpl.addPolicy((tech.claudioed.police.man.grpc.Policy) request,
+              (io.grpc.stub.StreamObserver<tech.claudioed.police.man.grpc.RegisteredPolicy>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -270,6 +343,7 @@ public final class PoliceOfficerGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new PoliceOfficerFileDescriptorSupplier())
               .addMethod(getRegistryMethod())
+              .addMethod(getAddPolicyMethod())
               .build();
         }
       }

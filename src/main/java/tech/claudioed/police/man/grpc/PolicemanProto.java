@@ -15,6 +15,16 @@ public final class PolicemanProto {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_policies_Policy_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_policies_Policy_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_policies_RegisteredPolicy_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_policies_RegisteredPolicy_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_policies_MessageData_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -33,13 +43,17 @@ public final class PolicemanProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017policeman.proto\022\010policies\"S\n\013MessageDa" +
+      "\n\017policeman.proto\022\010policies\"\026\n\006Policy\022\014\n" +
+      "\004word\030\001 \001(\t\"6\n\020RegisteredPolicy\022\014\n\004word\030" +
+      "\001 \001(\t\022\024\n\014registeredAt\030\002 \001(\t\"S\n\013MessageDa" +
       "ta\022\016\n\006userId\030\001 \001(\t\022\020\n\010threadId\030\002 \001(\t\022\017\n\007" +
       "content\030\003 \001(\t\022\021\n\tmessageId\030\004 \001(\t\"\030\n\nRegi" +
-      "stryID\022\n\n\002id\030\001 \001(\t2J\n\rPoliceOfficer\0229\n\010R" +
-      "egistry\022\025.policies.MessageData\032\024.policie" +
-      "s.RegistryID\"\000B2\n\036tech.claudioed.police." +
-      "man.grpcB\016PolicemanProtoP\001b\006proto3"
+      "stryID\022\n\n\002id\030\001 \001(\t2\207\001\n\rPoliceOfficer\0229\n\010" +
+      "Registry\022\025.policies.MessageData\032\024.polici" +
+      "es.RegistryID\"\000\022;\n\tAddPolicy\022\020.policies." +
+      "Policy\032\032.policies.RegisteredPolicy\"\000B2\n\036" +
+      "tech.claudioed.police.man.grpcB\016Policema",
+      "nProtoP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -53,14 +67,26 @@ public final class PolicemanProto {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_policies_MessageData_descriptor =
+    internal_static_policies_Policy_descriptor =
       getDescriptor().getMessageTypes().get(0);
+    internal_static_policies_Policy_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_policies_Policy_descriptor,
+        new java.lang.String[] { "Word", });
+    internal_static_policies_RegisteredPolicy_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_policies_RegisteredPolicy_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_policies_RegisteredPolicy_descriptor,
+        new java.lang.String[] { "Word", "RegisteredAt", });
+    internal_static_policies_MessageData_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_policies_MessageData_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_policies_MessageData_descriptor,
         new java.lang.String[] { "UserId", "ThreadId", "Content", "MessageId", });
     internal_static_policies_RegistryID_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_policies_RegistryID_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_policies_RegistryID_descriptor,

@@ -1,5 +1,7 @@
 package tech.claudioed.police.man.verticles;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -10,6 +12,7 @@ import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.micrometer.backends.BackendRegistries;
 import io.vertx.redis.client.*;
 import tech.claudioed.police.man.data.MessageContent;
 import tech.claudioed.police.man.data.PolicyViolationData;
@@ -21,8 +24,15 @@ public class ApplyPolicies extends AbstractVerticle {
 
   private RedisConfig redisConfig;
 
+  private Counter violations;
+
   @Override
   public void start(Promise<Void> startPromise) {
+    MeterRegistry registry = BackendRegistries.getDefaultNow();
+    this.violations = Counter
+      .builder("policy_violations")
+      .description("Chat Policy violations")
+      .register(registry);
     initConfig().compose(this::redis).onSuccess(connection ->{
       LOG.info("Starting redis connection...");
       var redisAPI = RedisAPI.api(connection);
@@ -37,6 +47,7 @@ public class ApplyPolicies extends AbstractVerticle {
               for (Response item : response) {
                 var word = item.toString();
                 if (messageContent.containsWord(word)) {
+                  this.violations.increment();
                   LOG.info("Violation was found..");
                   vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)));
                   break;
