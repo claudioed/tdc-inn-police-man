@@ -156,11 +156,6 @@
     <!-- Opentracing -->
 
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-opentracing</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>io.opentracing.contrib</groupId>
       <artifactId>opentracing-grpc</artifactId>
       <version>0.2.3</version>
@@ -180,6 +175,10 @@
         <exclusion>
           <groupId>io.grpc</groupId>
           <artifactId>grpc-all</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>io.prometheus</groupId>
+          <artifactId>simpleclient</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
