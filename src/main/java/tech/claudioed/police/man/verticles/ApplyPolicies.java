@@ -2,7 +2,6 @@ package tech.claudioed.police.man.verticles;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
@@ -16,7 +15,6 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.micrometer.backends.BackendRegistries;
 import io.vertx.redis.client.*;
-import io.vertx.tracing.opentracing.OpenTracingUtil;
 import tech.claudioed.police.man.data.MessageContent;
 import tech.claudioed.police.man.data.PolicyViolationData;
 import tech.claudioed.police.man.infra.RedisConfig;
@@ -46,10 +44,6 @@ public class ApplyPolicies extends AbstractVerticle {
         var json = new JsonObject(message.body().toString());
         var messageContent = new MessageContent(json);
         redisAPI.smembers("words").onSuccess(response -> {
-          Span span = tracer.buildSpan("check-violation").asChildOf(OpenTracingUtil.getSpan())
-            .start();
-          OpenTracingUtil.setSpan(span);
-          tracer.activateSpan(span);
           LOG.info("Checking words... ");
           if (response.size() > 0) {
             if (response.type() == ResponseType.MULTI) {
@@ -58,7 +52,6 @@ public class ApplyPolicies extends AbstractVerticle {
                 if (messageContent.containsWord(word)) {
                   this.violations.increment();
                   LOG.info("Violation was found..");
-                  span.finish();
                   vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)));
                   break;
                 }
@@ -67,7 +60,6 @@ public class ApplyPolicies extends AbstractVerticle {
           }else{
             LOG.info("There are no policies registered!!");
           }
-          span.finish();
         }).onFailure(err -> {
           LOG.error("Error to execute instruction in redis ", err);
         });
