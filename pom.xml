@@ -154,6 +154,12 @@
     </dependency>
 
     <!-- Opentracing -->
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-opentracing</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>io.opentracing.contrib</groupId>
       <artifactId>opentracing-grpc</artifactId>
