@@ -172,7 +172,26 @@
       <version>1.5.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>me.dinowernli</groupId>
+      <artifactId>java-grpc-prometheus</artifactId>
+      <version>0.3.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>io.grpc</groupId>
+          <artifactId>grpc-all</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>dinowernli-github-repo</id>
+      <url>https://raw.github.com/dinowernli/maven-repos/master</url>
+    </repository>
+  </repositories>
 
   <build>
 
