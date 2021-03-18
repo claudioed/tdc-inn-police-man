@@ -9,10 +9,12 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.tracing.TracingPolicy;
 import io.vertx.micrometer.backends.BackendRegistries;
 import io.vertx.redis.client.*;
 import tech.claudioed.police.man.data.MessageContent;
@@ -28,6 +30,8 @@ public class ApplyPolicies extends AbstractVerticle {
   private Counter violations;
 
   private Tracer tracer;
+
+  private final DeliveryOptions deliveryOptions = new DeliveryOptions().setTracingPolicy(TracingPolicy.ALWAYS);
 
   @Override
   public void start(Promise<Void> startPromise) {
@@ -52,7 +56,7 @@ public class ApplyPolicies extends AbstractVerticle {
                 if (messageContent.containsWord(word)) {
                   this.violations.increment();
                   LOG.info("Violation was found..");
-                  vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)));
+                  vertx.eventBus().send("request.policy.violation", Json.encode(PolicyViolationData.createNew(messageContent.getMessageId(), messageContent.getThreadId(), messageContent.getUserId(), word)),this.deliveryOptions);
                   break;
                 }
               }

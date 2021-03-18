@@ -6,10 +6,12 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.tracing.TracingPolicy;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -30,6 +32,8 @@ public class RegistryPolicyViolation extends AbstractVerticle {
 
   private DatasourceConfig datasourceConfig;
 
+  private final DeliveryOptions deliveryOptions = new DeliveryOptions().setTracingPolicy(TracingPolicy.ALWAYS);
+
   @Override
   public void start(Promise<Void> startPromise) {
     var start = initConfig().compose(this::updateDB).onSuccess(handler -> pool().compose(pgPool -> {
@@ -45,7 +49,7 @@ public class RegistryPolicyViolation extends AbstractVerticle {
           if (result.rowCount() > 0) {
             var blockUserIntent = new BlockUserIntent(policyViolation.getUserId());
             LOG.info("Policy Violation registered MESSAGE ID: " + policyViolation.getMessageId());
-            this.vertx.eventBus().send("request.block.user", Json.encode(blockUserIntent));
+            this.vertx.eventBus().send("request.block.user", Json.encode(blockUserIntent),this.deliveryOptions);
           } else {
             LOG.error("Policy Violation was not created MESSAGE ID:" + policyViolation.getMessageId());
           }

@@ -2,8 +2,10 @@ package tech.claudioed.police.man.service;
 
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import io.vertx.core.tracing.TracingPolicy;
 import tech.claudioed.police.man.data.MessageContent;
 import tech.claudioed.police.man.grpc.MessageData;
 import tech.claudioed.police.man.grpc.RegistryID;
@@ -17,6 +19,8 @@ public class RegistryService extends VertxPoliceOfficerGrpc.PoliceOfficerVertxIm
 
   private final Vertx vertx;
 
+  private final DeliveryOptions deliveryOptions = new DeliveryOptions().setTracingPolicy(TracingPolicy.ALWAYS);
+
   public RegistryService(Vertx vertx) {
     this.vertx = vertx;
   }
@@ -25,7 +29,7 @@ public class RegistryService extends VertxPoliceOfficerGrpc.PoliceOfficerVertxIm
   public Future<RegistryID> registry(MessageData request) {
     var message = new MessageContent(request.getThreadId(), request.getUserId(), request.getMessageId(), request.getContent());
     LOG.info("Receiving messages to check violations...");
-    vertx.eventBus().send("request.apply.policies", message.toJson());
+    vertx.eventBus().send("request.apply.policies", message.toJson(),this.deliveryOptions);
     LOG.info("Policy was received and will checked in a second!!!");
     return Future.succeededFuture(RegistryID.newBuilder().setId(UUID.randomUUID().toString()).build());
   }
