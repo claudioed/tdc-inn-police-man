@@ -29,6 +29,8 @@ public class ApplyPolicies extends AbstractVerticle {
 
   private Counter violations;
 
+  private Counter checked;
+
   private Tracer tracer;
 
   private final DeliveryOptions deliveryOptions = new DeliveryOptions().setTracingPolicy(TracingPolicy.ALWAYS);
@@ -40,11 +42,18 @@ public class ApplyPolicies extends AbstractVerticle {
       .builder("policy_violations")
       .description("Chat Policy violations")
       .register(registry);
+
+    this.checked = Counter
+      .builder("checked_words")
+      .description("Chat checked words")
+      .register(registry);
+
     initConfig().compose(this::redis).onSuccess(connection ->{
       LOG.info("Starting redis connection...");
       var redisAPI = RedisAPI.api(connection);
       vertx.eventBus().consumer("request.apply.policies", message -> {
         LOG.info("Checking violations...");
+        this.checked.increment();
         var json = new JsonObject(message.body().toString());
         var messageContent = new MessageContent(json);
         redisAPI.smembers("words").onSuccess(response -> {
